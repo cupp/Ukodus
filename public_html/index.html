@@ -21,13 +21,51 @@ and open the template in the editor.
             </canvas>
         </div>
         <script>
+            var used = new Array();
+            var usedCount = 0;
+            var cpuTimer = setInterval("showRandom()",50);
+            for (var i = 0; i < 9; i++)
+            {
+                used[i] = new Array(0,0,0,0,0,0,0,0,0);
+            }
             var width = 100;
-            function showNum(i, j) {
+            
+            function checkTimer() {
+                if (usedCount === 81) {
+                    clearInterval(cpuTimer);
+                } else if (usedCount == 17) {
+                    clearInterval(cpuTimer);
+                    cpuTimer = setInterval("showRandom()",3000);
+                } else if (usedCount == 35) {
+                    clearInterval(cpuTimer);
+                    cpuTimer = setInterval("showRandom()",2000);
+                } else if (usedCount == 60) {
+                    clearInterval(cpuTimer);
+                    cpuTimer = setInterval("showRandom()",1000);
+                }
+            }
+            
+            function showNum(i, j, color) {
+                color = typeof color !== 'undefined' ? color : "black";
                 var c=document.getElementById("myCanvas");
                 var ctx=c.getContext("2d");
                 ctx.font="72px Arial";
-                ctx.fillStyle="#000000";
+                ctx.fillStyle=color;
                 ctx.fillText(grid[i][j], (i-0.69+1) * width,(j-0.24+1) * width);
+            }
+            
+            function showRandom() {
+                if (usedCount < 81) {
+                    do {
+                        var g = Math.floor(Math.random() * 9);
+                        var h = Math.floor(Math.random() * 9);
+
+                    } while (used[g][h] !== 0);  
+                    used[g][h] = 1;
+                    usedCount++;
+                    showNum(g,h,"black");
+                    checkTimer();
+                }
             }
             
             function getMousePos(canvas, evt) {
@@ -56,21 +94,21 @@ and open the template in the editor.
                 return arr2;
             }
 
-            grid = new Array();
-            rowAvailable = new Array();
-            colAvailable = new Array();
-            blockAvailable = new Array();
-            for (var i = 0; i < 9; i++) {
-                grid[i] = new Array();
-                rowAvailable[i] = new Array();
-                colAvailable[i] = new Array();
-                blockAvailable[i] = new Array();
-                for (var j = 0; j < 9; j++) {
-                    rowAvailable[i][j] = true;
-                    colAvailable[i][j] = true;
-                    blockAvailable[i][j] = true;
-                }
-            }
+//            grid = new Array();
+//            rowAvailable = new Array();
+//            colAvailable = new Array();
+//            blockAvailable = new Array();
+//            for (var i = 0; i < 9; i++) {
+//                grid[i] = new Array();
+//                rowAvailable[i] = new Array();
+//                colAvailable[i] = new Array();
+//                blockAvailable[i] = new Array();
+//                for (var j = 0; j < 9; j++) {
+//                    rowAvailable[i][j] = true;
+//                    colAvailable[i][j] = true;
+//                    blockAvailable[i][j] = true;
+//                }
+//            }
             
             
             
@@ -82,34 +120,34 @@ and open the template in the editor.
 //                }
 //            }
 
-            grid[0] = Array(1,2,3,4,5,6,7,8,9);
-            grid[1] = Array(4,5,6,7,8,9,1,2,3);
-            grid[2] = Array(7,8,9,1,2,3,4,5,6);
-            grid[3] = Array(2,3,4,5,6,7,8,9,1);
-            grid[4] = Array(5,6,7,8,9,1,2,3,4);
-            grid[5] = Array(8,9,1,2,3,4,5,6,7);
-            grid[6] = Array(3,4,5,6,7,8,9,1,2);
-            grid[7] = Array(6,7,8,9,1,2,3,4,5);
-            grid[8] = Array(9,1,2,3,4,5,6,7,8);
+//            grid[0] = Array(1,2,3,4,5,6,7,8,9);
+//            grid[1] = Array(4,5,6,7,8,9,1,2,3);
+//            grid[2] = Array(7,8,9,1,2,3,4,5,6);
+//            grid[3] = Array(2,3,4,5,6,7,8,9,1);
+//            grid[4] = Array(5,6,7,8,9,1,2,3,4);
+//            grid[5] = Array(8,9,1,2,3,4,5,6,7);
+//            grid[6] = Array(3,4,5,6,7,8,9,1,2);
+//            grid[7] = Array(6,7,8,9,1,2,3,4,5);
+//            grid[8] = Array(9,1,2,3,4,5,6,7,8);
 
-for (var iter=1; iter <= 1000; iter++) {
-    var x = Math.floor(Math.random() * 9) + 1;
-    var y = Math.floor(Math.random() * 9) + 1;
-    for (var i = 0; i < 9; i++)
-    {
-        var a = grid[i].indexOf(x);
-        var b = grid[i].indexOf(y);
-        var temp = grid[i][a]; 
-        grid[i][a] = grid[i][b];
-        grid[i][b] = temp;
-    }
-    z = Math.floor(Math.random() * 3);
-    x = Math.floor(Math.random() * 3) + z * 3;
-    y = Math.floor(Math.random() * 3) + z * 3;
-    var temp = [].concat(grid[x]);
-    grid[x] = [].concat(grid[y]);
-    grid[y] = [].concat(temp);
-}
+//for (var iter=1; iter <= 1000; iter++) {
+//    var x = Math.floor(Math.random() * 9) + 1;
+//    var y = Math.floor(Math.random() * 9) + 1;
+//    for (var i = 0; i < 9; i++)
+//    {
+//        var a = grid[i].indexOf(x);
+//        var b = grid[i].indexOf(y);
+//        var temp = grid[i][a]; 
+//        grid[i][a] = grid[i][b];
+//        grid[i][b] = temp;
+//    }
+//    z = Math.floor(Math.random() * 3);
+//    x = Math.floor(Math.random() * 3) + z * 3;
+//    y = Math.floor(Math.random() * 3) + z * 3;
+//    var temp = [].concat(grid[x]);
+//    grid[x] = [].concat(grid[y]);
+//    grid[y] = [].concat(temp);
+//}
  
                 
 //            for (var iteration = 1; iteration <= 1; iteration++) {
@@ -163,10 +201,37 @@ for (var iter=1; iter <= 1000; iter++) {
                 $("#myCanvas").click(function(e) {
                    var x = Math.floor((e.pageX-$("#myCanvas").offset().left)/width);
                    var y = Math.floor((e.pageY-$("#myCanvas").offset().top)/width);
-                   showNum(x,y);
+                   if (used[x][y] === 0) {
+                       used[x][y] = 2;
+                       usedCount++;
+                       showNum(x,y,"blue");
+                   }
                 });
                 $.getJSON("1.json", function(data) {
                     grid = data["1"];
+                    for (var iter=1; iter <= 1000; iter++) {
+                        var x = Math.floor(Math.random() * 9) + 1;
+                        var y = Math.floor(Math.random() * 9) + 1;
+                        for (var i = 0; i < 9; i++)
+                        {
+                            var a = grid[i].indexOf(x);
+                            var b = grid[i].indexOf(y);
+                            var temp = grid[i][a]; 
+                            grid[i][a] = grid[i][b];
+                            grid[i][b] = temp;
+                        }
+                        z = Math.floor(Math.random() * 3);
+                        x = Math.floor(Math.random() * 3) + z * 3;
+                        y = Math.floor(Math.random() * 3) + z * 3;
+                        var temp = [].concat(grid[x]);
+                        grid[x] = [].concat(grid[y]);
+                        grid[y] = [].concat(temp);
+                    }
+                    for (var i = 0; i < 0; i++) {
+                        var a = Math.floor(Math.random() * 9);
+                        var b = Math.floor(Math.random() * 9);
+                        showNum(a,b);
+                    }
                 });
             });
         </script>
